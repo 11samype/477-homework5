@@ -14,26 +14,18 @@ import java.util.jar.JarFile;
 
 public class Loader {
 
-	public void load() throws Exception {
-		// URL[] classLoaderUrls = new URL[]{new URL("../plugins/test.jar")};
-		//
-		//
+	public ArrayList<File> load() throws Exception {
 		File file = new File("plugins/plugindir.txt");
-		// URL url = file.toURI().toURL();
-		// URL[] urls = new URL[]{url};
-		// ClassLoader cl = new URLClassLoader(urls);
-		//
-		// Class<?> helloClass = cl.getClass();
-		// //Class<? extends IPlugin> pluginClass =
-		// helloClass.asSubclass(IPlugin.class);
-		// IPlugin plugin = (IPlugin) helloClass.newInstance();
-		// plugin.execute();
-		// plugin.status();
+		ArrayList<File> toLoad = new ArrayList<File>();
+		
+		Scanner myScanner = new Scanner(file);
+		while (myScanner.hasNextLine()) {
+			String line = myScanner.nextLine();
+			File jarFile = new File("plugins/" + line);
+			toLoad.add(jarFile);
+		}
 
-		scanFileForJarFiles(file);
-
-		// scanJarFileForClasses();
-
+		return toLoad;
 	}
 
 	public void scanFileForJarFiles(File file) throws IOException {
