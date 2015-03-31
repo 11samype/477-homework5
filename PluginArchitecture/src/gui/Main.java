@@ -20,6 +20,7 @@ public class Main {
 		window.add(exec, BorderLayout.CENTER);
 		window.add(status, BorderLayout.SOUTH);
 		window.setVisible(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }
