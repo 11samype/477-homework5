@@ -1,5 +1,7 @@
 package platform;
 
+import gui.Main;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -52,8 +54,8 @@ public class Loader {
 							jarFile, IPlugin.class, loader);
 					for (Class<?> class1 : list) {
 						IPlugin plugin = (IPlugin) class1.newInstance();
-						plugin.execute();
-						plugin.status();
+						plugin.execute(Main.exec);
+						plugin.status(Main.status);
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

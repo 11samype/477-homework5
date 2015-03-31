@@ -1,5 +1,7 @@
 package platform;
 
+import gui.Main;
+
 import java.awt.image.ReplicateScaleFilter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -123,7 +125,7 @@ public class Installer {
 			}
 		
 		}
-		System.out.println("Installation of " + selectedFile.getName() + " complete");
+		Main.status.printStatus("Installation of " + selectedFile.getName() + " complete");
 
 	}
 	
