@@ -33,6 +33,25 @@ public class ListPanel extends JPanel {
 		this.setBackground(Color.BLUE);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		loader = new Loader();
+
+		loadList();
+
+	}
+	
+	
+	public void executeJar(JButton clicked){
+		int index = this.getComponentZOrder(clicked);
+		try {
+			System.out.println(this.myJars.get(index));
+			loader.runJarFile(this.myJars.get(index));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadList() {
+		this.removeAll();
 		try {
 			myJars = loader.load();
 			for (File jar : myJars){
@@ -51,34 +70,6 @@ public class ListPanel extends JPanel {
 				this.add(fileButton);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		JButton installButton = new JButton();
-		installButton.setText("Install A Plugin");
-		installButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				JFrame frame = new JFrame();
-				
-				Installer installer = new Installer();
-				installer.loadFile(frame);
-				
-			}
-		});
-		
-		this.add(installButton);
-	}
-	
-	public void executeJar(JButton clicked){
-		int index = this.getComponentZOrder(clicked);
-		try {
-			System.out.println(this.myJars.get(index));
-			loader.scanFileForJarFiles(this.myJars.get(index));
-		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

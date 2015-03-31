@@ -25,6 +25,7 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Installer {
@@ -41,13 +42,15 @@ public class Installer {
 	}
 
 	public void loadFile(JFrame parent) {
+		fileChooser.setCurrentDirectory(new File(System
+				.getProperty("user.home")));
 		int result = fileChooser.showOpenDialog(parent);
 
 		if (result == JFileChooser.APPROVE_OPTION) {
 			// user selects a file
 			File selectedFile = fileChooser.getSelectedFile();
-			System.out.println("Selected file: "
-					+ selectedFile.getAbsolutePath());
+//			System.out.println("Selected file: "
+//					+ selectedFile.getAbsolutePath());
 
 			checkFile(selectedFile);
 		}
@@ -64,9 +67,9 @@ public class Installer {
 			e.printStackTrace();
 		}
 
-		for (String string : classes) {
-			System.out.println(string);
-		}
+//		for (String string : classes) {
+//			System.out.println(string);
+//		}
 
 		URL url = null;
 		try {
@@ -114,7 +117,6 @@ public class Installer {
 			
 		}
 		if (!alreadyInstalled) {
-			System.out.println("not already installed");
 			try (PrintWriter out = new PrintWriter(new BufferedWriter(
 					new FileWriter("plugins/plugindir.txt", true)));) {
 	
@@ -129,36 +131,51 @@ public class Installer {
 
 	}
 	
-	public void unInstallJar(String jarName) throws IOException {
+	public void unInstallJar(JFrame parent) throws IOException {
 		
-		Path pluginPath = Paths.get("plugins/plugindir.txt");
-		Path tempPath = Paths.get("plugins/plugindirtemp.txt");
+		fileChooser.setCurrentDirectory(new File("plugins/"));
 		
-		Files.copy(pluginPath, tempPath, StandardCopyOption.REPLACE_EXISTING);
-		
-		File pluginDir = new File("plugins/plugindir.txt");
-		File pluginDirTemp = new File("plugins/plugindirtemp.txt");
-		
-		if (pluginDirTemp == null || !pluginDirTemp.exists()) {
-			throw new IllegalArgumentException("Invalid file to scan provided");
+		int result = fileChooser.showOpenDialog(parent);
 
-		} else {
-			Scanner myScanner = new Scanner(pluginDirTemp);
-			PrintStream out = new PrintStream(pluginDir);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			// user selects a file
+			File selectedFile = fileChooser.getSelectedFile();
+//			System.out.println("Selected file: "
+//					+ selectedFile.getAbsolutePath());
 
-			while (myScanner.hasNextLine()) {
+			Path pluginPath = Paths.get("plugins/plugindir.txt");
+			Path tempPath = Paths.get("plugins/plugindirtemp.txt");
+			
+			Files.copy(pluginPath, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			
+			File pluginDir = new File("plugins/plugindir.txt");
+			File pluginDirTemp = new File("plugins/plugindirtemp.txt");
+			
+			if (pluginDirTemp == null || !pluginDirTemp.exists()) {
+				throw new IllegalArgumentException("Invalid file to scan provided");
 
-				String line = myScanner.nextLine();
-				if (!(line.equals(jarName))) {
-					out.println(line);
+			} else {
+				Scanner myScanner = new Scanner(pluginDirTemp);
+				PrintStream out = new PrintStream(pluginDir);
+
+				while (myScanner.hasNextLine()) {
+
+					String line = myScanner.nextLine();
+					if (!(line.equals(selectedFile.getName()))) {
+						out.println(line);
+					}
+					
 				}
 				
+				Files.delete(Paths.get("plugins/" + selectedFile.getName()));
+				
+				removePluginDirWhiteSpace();
 			}
 			
-			Files.delete(Paths.get("plugins/" + jarName));
 			
-			removePluginDirWhiteSpace();
 		}
+		
+		
 	}
 	
 	public static void removePluginDirWhiteSpace() throws IOException {

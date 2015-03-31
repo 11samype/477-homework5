@@ -7,6 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public interface IPlugin {
-	void execute(ExecPanel execPanel);
-	void status(StatusPanel statusPanel);
+	JPanel executeMainGUI();
+	void statusSetup(StatusPanel statusPanel);
 }

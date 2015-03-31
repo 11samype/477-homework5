@@ -54,14 +54,38 @@ public class Loader {
 							jarFile, IPlugin.class, loader);
 					for (Class<?> class1 : list) {
 						IPlugin plugin = (IPlugin) class1.newInstance();
-						plugin.execute(Main.exec);
-						plugin.status(Main.status);
+						plugin.statusSetup(Main.status);
+						Main.swapExecPanel(plugin.executeMainGUI());
+						
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	public void runJarFile(File jarFile) throws IllegalArgumentException, IOException {
+
+		// System.out.println(jarFile.toString()+": "+jarFile.exists());
+		List<String> classes = Utils.scanJarFileForClasses(jarFile);
+
+		URL[] urls = new URL[] { jarFile.toURI().toURL() };
+		URLClassLoader loader = new URLClassLoader(urls);
+
+		try {
+			List<Class<?>> list = Utils.findImplementingClassesInJarFile(
+					jarFile, IPlugin.class, loader);
+			for (Class<?> class1 : list) {
+				IPlugin plugin = (IPlugin) class1.newInstance();
+				plugin.statusSetup(Main.status);
+				Main.swapExecPanel(plugin.executeMainGUI());
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
