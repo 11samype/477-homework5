@@ -30,7 +30,7 @@ public class ListPanel extends JPanel {
 
 	public ListPanel(){
 		super();
-		this.setBackground(Color.BLUE);
+		this.setBackground(Color.LIGHT_GRAY);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		loader = new Loader();
 

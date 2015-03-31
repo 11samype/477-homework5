@@ -22,6 +22,6 @@ public class ExecPanel extends JPanel {
 
 	public ExecPanel(){
 		super();
-		this.setBackground(Color.CYAN);
+		this.setBackground(Color.GRAY);
 	}
 }

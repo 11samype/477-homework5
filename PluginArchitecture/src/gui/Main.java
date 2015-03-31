@@ -106,11 +106,11 @@ public class Main {
 		window.add(newPanel, BorderLayout.CENTER);
 		window.update(window.getGraphics());
 		window.setVisible(true);
-		status.printStatus("swapped");
+		status.printStatus("New Plugin Loaded");
 		
-		for (Component component : newPanel.getComponents()) {
-			status.printStatus(component.getClass().toString());
-		}
+//		for (Component component : newPanel.getComponents()) {
+//			status.printStatus(component.getClass().toString());
+//		}
 		
 	}
 
