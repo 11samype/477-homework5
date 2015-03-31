@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import platform.Installer;
 import platform.Loader;
 
 public class ListPanel extends JPanel {
@@ -52,6 +54,23 @@ public class ListPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		JButton installButton = new JButton();
+		installButton.setText("Install A Plugin");
+		installButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				JFrame frame = new JFrame();
+				
+				Installer installer = new Installer();
+				installer.loadFile(frame);
+				
+			}
+		});
+		
+		this.add(installButton);
 	}
 	
 	public void executeJar(JButton clicked){

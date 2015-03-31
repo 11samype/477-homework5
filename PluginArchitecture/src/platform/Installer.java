@@ -98,17 +98,32 @@ public class Installer {
 
 		Files.copy(selectedFile.toPath(), destination,
 					StandardCopyOption.REPLACE_EXISTING);
+		
+		Scanner myScanner = new Scanner(new File("plugins/plugindir.txt"));
+		boolean alreadyInstalled = false;
+		while (myScanner.hasNextLine()) {
 
-		try (PrintWriter out = new PrintWriter(new BufferedWriter(
-				new FileWriter("plugins/plugindir.txt", true)));) {
-
-			out.println(selectedFile.getName());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String line = myScanner.nextLine();
+			
+			if (line.equals(selectedFile.getName())) {
+				alreadyInstalled = true;
+				break;
+			}
+			
 		}
-
-		System.out.println("Install of " + selectedFile.getName() + " complete");
+		if (!alreadyInstalled) {
+			System.out.println("not already installed");
+			try (PrintWriter out = new PrintWriter(new BufferedWriter(
+					new FileWriter("plugins/plugindir.txt", true)));) {
+	
+				out.println(selectedFile.getName());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
+		System.out.println("Installation of " + selectedFile.getName() + " complete");
 
 	}
 	
