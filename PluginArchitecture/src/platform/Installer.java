@@ -1,9 +1,14 @@
 package platform;
 
+import java.awt.image.ReplicateScaleFilter;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -86,18 +92,12 @@ public class Installer {
 
 	}
 
-	private void installJar(File selectedFile) {
+	private void installJar(File selectedFile) throws IOException {
 
 		Path destination = Paths.get("plugins/" + selectedFile.getName());
 
-		try {
-			Files.copy(selectedFile.toPath(), destination,
+		Files.copy(selectedFile.toPath(), destination,
 					StandardCopyOption.REPLACE_EXISTING);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		try (PrintWriter out = new PrintWriter(new BufferedWriter(
 				new FileWriter("plugins/plugindir.txt", true)));) {
@@ -110,6 +110,62 @@ public class Installer {
 
 		System.out.println("Install of " + selectedFile.getName() + " complete");
 
+	}
+	
+	public void unInstallJar(String jarName) throws IOException {
+		
+		Path pluginPath = Paths.get("plugins/plugindir.txt");
+		Path tempPath = Paths.get("plugins/plugindirtemp.txt");
+		
+		Files.copy(pluginPath, tempPath, StandardCopyOption.REPLACE_EXISTING);
+		
+		File pluginDir = new File("plugins/plugindir.txt");
+		File pluginDirTemp = new File("plugins/plugindirtemp.txt");
+		
+		if (pluginDirTemp == null || !pluginDirTemp.exists()) {
+			throw new IllegalArgumentException("Invalid file to scan provided");
+
+		} else {
+			Scanner myScanner = new Scanner(pluginDirTemp);
+			PrintStream out = new PrintStream(pluginDir);
+
+			while (myScanner.hasNextLine()) {
+
+				String line = myScanner.nextLine();
+				if (!(line.equals(jarName))) {
+					out.println(line);
+				}
+				
+			}
+			
+			Files.delete(Paths.get("plugins/" + jarName));
+			
+			removePluginDirWhiteSpace();
+		}
+	}
+	
+	public static void removePluginDirWhiteSpace() throws IOException {
+
+		Path pluginPath = Paths.get("plugins/plugindir.txt");
+		Path tempPath = Paths.get("plugins/plugindirtemp.txt");
+		
+		Files.copy(pluginPath, tempPath, StandardCopyOption.REPLACE_EXISTING);
+		
+		File pluginDir = new File("plugins/plugindir.txt");
+		File pluginDirTemp = new File("plugins/plugindirtemp.txt");
+
+		Scanner scanner = new Scanner(pluginDirTemp);
+
+		PrintStream out = new PrintStream(pluginDir);
+
+		while(scanner.hasNextLine()){
+		    String line = scanner.nextLine();
+		    line = line.trim();
+		    if(line.length() > 0) {
+		        out.println(line);
+		    }
+		}
+		
 	}
 
 }
