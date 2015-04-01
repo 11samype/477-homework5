@@ -128,7 +128,7 @@ public class Installer {
 		
 		}
 		Main.status.printStatus("Installation of " + selectedFile.getName() + " complete");
-
+		myScanner.close();
 	}
 	
 	public void unInstallJar(JFrame parent) throws IOException {
@@ -169,7 +169,11 @@ public class Installer {
 				
 				Files.delete(Paths.get("plugins/" + selectedFile.getName()));
 				
+				myScanner.close();
+				
 				removePluginDirWhiteSpace();
+				
+				Main.status.printStatus("Uninstallation of " + selectedFile.getName() + " complete");
 			}
 			
 			
@@ -199,6 +203,8 @@ public class Installer {
 		        out.println(line);
 		    }
 		}
+		
+		scanner.close();
 		
 	}
 
